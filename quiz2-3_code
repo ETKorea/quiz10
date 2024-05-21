@@ -1,4 +1,4 @@
-﻿
+
 // quiz2-3View.cpp: Cquiz23View 클래스의 구현
 //
 
@@ -15,6 +15,10 @@
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#endif
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 #endif
 
 
@@ -58,11 +62,49 @@ void Cquiz23View::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
+	CRect rect;
+	GetClientRect(&rect);
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
+	CPen blackPen(PS_SOLID, 5, RGB(0, 0, 0)); // 5픽셀 너비의 검은색 펜
+	CPen* pOldPen = nullptr;
+	pOldPen = pDC->SelectObject(&blackPen);
 	pDC->Rectangle(pnt.x - 50, pnt.y - 50, pnt.x + 50, pnt.y + 50);
 	pDC->Ellipse(pnt.x - 50, pnt.y - 50, pnt.x + 50, pnt.y + 50);
 	pDC->TextOutW(pnt.x - 30, pnt.y, L"HELLO ANU");
+	pDC->SelectObject(pOldPen);
+	CPen GPen(PS_SOLID, 10, RGB(0, 255, 0));
+	pOldPen = pDC->SelectObject(&GPen); // 펜 적용
+	pDC->RoundRect(rect, CPoint(20, 20));
+	pDC->SelectObject(pOldPen); // 이전 펜(검은색)으로 돌아갑니다.
+
+	pOldPen = pDC->SelectObject(&blackPen);
+	CPoint triPoints[3];
+	int margin = 10; // 삼각형과 창 경계 사이의 여백
+	int triSize = 50; // 삼각형의 크기
+	triPoints[0] = CPoint(rect.right - margin - triSize, margin + triSize / sqrt(2)); // 상단 좌측
+	triPoints[1] = CPoint(rect.right - margin, margin + triSize / sqrt(2)); // 상단 우측
+	triPoints[2] = CPoint(rect.right - margin - triSize / 2, margin); // 하단 중앙
+	pDC->MoveTo(triPoints[0]);
+	pDC->LineTo(triPoints[1]);
+	pDC->LineTo(triPoints[2]);
+	pDC->LineTo(triPoints[0]);
+	pDC->SelectObject(pOldPen);
+	CPen YPen(PS_SOLID, 10, RGB(255, 255, 0));
+	pOldPen = pDC->SelectObject(&YPen);
+	const int starPoints = 10; // 별의 꼭짓점 수
+	CPoint star[starPoints];
+	double radius1 = 100.0, radius2 = 40.0; // 별의 바깥쪽과 안쪽 반지름
+	double angle = M_PI / starPoints * 2; // 꼭짓점 사이의 각도
+
+	for (int i = 0; i < starPoints; ++i)
+	{
+		double r = i % 2 == 0 ? radius1 : radius2;
+		star[i] = CPoint(rect.CenterPoint().x + cos(i * angle) * r, rect.CenterPoint().y + sin(i * angle) * r);
+	}
+
+	pDC->Polygon(star, starPoints);
+	pDC->SelectObject(pOldPen); // 작업이 끝난 후 원래 펜으로 돌아갑니다.
+	
 }
 
 
