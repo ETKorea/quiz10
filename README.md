@@ -3,7 +3,7 @@
 3D 별모양을 좌표로 만들어 색을 꼭짓점별로 입혀준 다음 회전을 시켰습니다.
 #### 작동사진
 ### ![별모양 1](https://github.com/ETKorea/Shared-data/blob/main/star1.png)
-### ![별모양 2](https://github.com/ETKorea/Shared-data/blob/main/star2.png)
+###### ![별모양 2](https://github.com/ETKorea/Shared-data/blob/main/star2.png)
 ***
 ## visual studio_MFC App
 #### 설계
